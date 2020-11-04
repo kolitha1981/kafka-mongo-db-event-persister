@@ -1,5 +1,7 @@
 package org.persistent.kafkaeventpersister.config;
 
+import java.text.MessageFormat;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
@@ -28,14 +30,11 @@ public class MongoRepositoryConfig extends AbstractMongoClientConfiguration {
 
 	@Override
     public MongoClient mongoClient() {
-    	final String mongoDbConnectionString = String.format("mongodb://{0}:{1}/{2}", 
-    			new Object[] {server, serverPort, databaseName});    			
-        final ConnectionString connectionString = 
-        		new ConnectionString(mongoDbConnectionString);
-        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-            .applyConnectionString(connectionString)
-            .build();
-        return MongoClients.create(mongoClientSettings);
+    	return MongoClients.create(MongoClientSettings.builder()
+				.applyConnectionString(new ConnectionString(
+						MessageFormat.format("mongodb://{0}:{1}/{2}", 
+								new Object[] { server, serverPort, databaseName })))
+				.build());
     }
 
 }
