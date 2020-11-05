@@ -21,7 +21,6 @@ public class PassengerEvent {
     }
     
 	public PassengerEvent(String eventType, Long userId, Date createdOn, String createdBy) {
-		super();
 		this.eventType = eventType;
 		this.userId = userId;
 		this.createdOn = createdOn;
@@ -54,20 +53,14 @@ public class PassengerEvent {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-		return result;
+		return 31 * (((createdOn == null) ? 0 : createdOn.hashCode()) + 31) + ((userId == null) ? 0 : userId.hashCode());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (obj == this)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || getClass() != obj.getClass())
 			return false;
 		PassengerEvent other = (PassengerEvent) obj;
 		if (createdOn == null) {

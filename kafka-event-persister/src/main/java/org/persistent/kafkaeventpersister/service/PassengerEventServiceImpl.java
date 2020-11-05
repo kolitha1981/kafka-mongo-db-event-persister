@@ -11,10 +11,20 @@ public class PassengerEventServiceImpl implements PassengerEventService {
 
 	@Autowired
 	private PassengerEventRepository passengerEventRepository;
-	
+
 	@Transactional
 	public PassengerEvent save(final PassengerEvent passengerEvent) {
 		return this.passengerEventRepository.save(passengerEvent);
+	}
+
+	@Override
+	public PassengerEvent findByEventId(String id) {
+		return this.passengerEventRepository.findByEventId(id);
+	}
+
+	@Override
+	public PassengerEvent findByUserId(Long userId) {
+		return this.passengerEventRepository.findByUserId(userId);
 	}
 
 }
