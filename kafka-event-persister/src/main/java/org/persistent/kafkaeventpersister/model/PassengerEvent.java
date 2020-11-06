@@ -20,7 +20,8 @@ public class PassengerEvent {
     	
     }
     
-	public PassengerEvent(String eventType, Long userId, Date createdOn, String createdBy) {
+	public PassengerEvent(String passengerId, String eventType, Long userId, Date createdOn, String createdBy) {
+		this.passengerId = passengerId;
 		this.eventType = eventType;
 		this.userId = userId;
 		this.createdOn = createdOn;

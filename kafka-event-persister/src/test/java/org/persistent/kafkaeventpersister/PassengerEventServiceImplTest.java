@@ -22,7 +22,7 @@ class PassengerEventServiceImplTest {
 
 	@Test
 	public void testSavePassengerEvent() {
-		final PassengerEvent passengerEvent = new PassengerEvent("CREATE-JOURNEY", 1L, Calendar.getInstance().getTime(),
+		final PassengerEvent passengerEvent = new PassengerEvent("1","CREATE-JOURNEY", 1L, Calendar.getInstance().getTime(),
 				"admin"), savedEvent = passengerEventRepository.save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
@@ -30,7 +30,7 @@ class PassengerEventServiceImplTest {
 
 	@Test
 	public void testGetEventByPassengerId() {
-		final PassengerEvent passengerEvent = new PassengerEvent("CREATE-JOURNEY", 2L, Calendar.getInstance().getTime(),
+		final PassengerEvent passengerEvent = new PassengerEvent("2","CREATE-JOURNEY", 2L, Calendar.getInstance().getTime(),
 				"admin"), savedEvent = passengerEventRepository.save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
@@ -42,7 +42,7 @@ class PassengerEventServiceImplTest {
 
 	@Test
 	public void testGetEventByUserId() {
-		final PassengerEvent passengerEvent = new PassengerEvent("CREATE-JOURNEY", 3L, Calendar.getInstance().getTime(),
+		final PassengerEvent passengerEvent = new PassengerEvent("3","CREATE-JOURNEY", 3L, Calendar.getInstance().getTime(),
 				"admin"), savedEvent = passengerEventRepository.save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
