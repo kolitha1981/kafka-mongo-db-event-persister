@@ -3,17 +3,16 @@ package org.persistent.kafkaeventpersister;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.persistent.kafkaeventpersister.model.PassengerEvent;
 import org.persistent.kafkaeventpersister.repository.PassengerEventRepository;
+import org.persistent.kafkaeventpersister.service.PassengerEventServiceImpl;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ class PassengerEventServiceImplTest {
 		final Date createdOn = Calendar.getInstance().getTime();
 		final String createdBy = "admin";
 		final PassengerEvent passengerEvent = new PassengerEvent(passengerEventId, eventType, userId, createdOn,
-				createdBy), savedEvent = passengerEventRepository.save(passengerEvent);
+				createdBy), savedEvent = new PassengerEventServiceImpl(passengerEventRepository).save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
 		assertEquals(savedEvent.getPassengerId(), passengerEventId);
@@ -74,12 +73,14 @@ class PassengerEventServiceImplTest {
 		final Long userId1 = Long.valueOf(2);
 		passengerEvents.add(new PassengerEvent(passengerEventId1, eventType, userId1, createdOn, createdBy));
 		final String passengerEventId2 = String.valueOf(1);
-		final Long userId2 = Long.valueOf(1);
+		final Long userId2 = Long.valueOf(3);
 		passengerEvents.add(new PassengerEvent(passengerEventId2, eventType, userId2, createdOn, createdBy));
 		final String passengerEventId3 = String.valueOf(1);
-		final Long userId3 = Long.valueOf(1);
+		final Long userId3 = Long.valueOf(4);
 		passengerEvents.add(new PassengerEvent(passengerEventId3, eventType, userId3, createdOn, createdBy));
-		passengerEventRepository.saveAll(passengerEvents);
+		final List<PassengerEvent> savedPassengerEvents = new PassengerEventServiceImpl(passengerEventRepository).save(passengerEvents);
+		assertNotNull(savedPassengerEvents);
+		assertEquals(savedPassengerEvents.size(), 4);
 	}
 
 	@Test
@@ -88,7 +89,7 @@ class PassengerEventServiceImplTest {
 				Calendar.getInstance().getTime(), "admin"), savedEvent = passengerEventRepository.save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
-		final PassengerEvent retrievedEvent = passengerEventRepository.findByEventId(savedEvent.getPassengerId());
+		final PassengerEvent retrievedEvent = new PassengerEventServiceImpl(passengerEventRepository).findByEventId(savedEvent.getPassengerId());
 		assertNotNull(retrievedEvent);
 		assertNotNull(retrievedEvent.getPassengerId());
 		assertEquals(savedEvent.getPassengerId(), retrievedEvent.getPassengerId());
@@ -100,7 +101,7 @@ class PassengerEventServiceImplTest {
 				Calendar.getInstance().getTime(), "admin"), savedEvent = passengerEventRepository.save(passengerEvent);
 		assertNotNull(savedEvent);
 		assertNotNull(savedEvent.getPassengerId());
-		final PassengerEvent retrievedEvent = passengerEventRepository.findByEventId(savedEvent.getPassengerId());
+		final PassengerEvent retrievedEvent = new PassengerEventServiceImpl(passengerEventRepository).findByEventId(savedEvent.getPassengerId());
 		assertNotNull(retrievedEvent);
 		assertNotNull(retrievedEvent.getPassengerId());
 		assertEquals(savedEvent.getPassengerId(), retrievedEvent.getPassengerId());
@@ -109,8 +110,6 @@ class PassengerEventServiceImplTest {
 	@Configuration
 	static class MongoConfiguration implements InitializingBean, DisposableBean {
 		MongodExecutable executable;
-		@Value("${org.persistent.database.name}")
-		private String databaseName;
 		@Value("${org.persistent.database.server.name}")
 		private String server;
 		@Value("${org.persistent.database.server.port}")

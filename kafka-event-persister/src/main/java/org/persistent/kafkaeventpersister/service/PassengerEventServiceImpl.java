@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PassengerEventServiceImpl implements PassengerEventService {
 
-	@Autowired
 	private PassengerEventRepository passengerEventRepository;
+
+	@Autowired
+	public PassengerEventServiceImpl(PassengerEventRepository passengerEventRepository) {
+		this.passengerEventRepository = passengerEventRepository;
+	}
 
 	@Transactional
 	public PassengerEvent save(final PassengerEvent passengerEvent) {
@@ -30,13 +34,8 @@ public class PassengerEventServiceImpl implements PassengerEventService {
 	}
 
 	@Override
-	public boolean save(List<PassengerEvent> passengerEvents) {
-		try {
-			this.passengerEventRepository.saveAll(passengerEvents);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
+	public List<PassengerEvent> save(List<PassengerEvent> passengerEvents) {
+		return this.passengerEventRepository.saveAll(passengerEvents);
 	}
 
 }
