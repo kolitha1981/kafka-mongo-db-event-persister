@@ -1,5 +1,7 @@
 package org.persistent.kafkaeventpersister.service;
 
+import java.util.List;
+
 import org.persistent.kafkaeventpersister.model.PassengerEvent;
 import org.persistent.kafkaeventpersister.repository.PassengerEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,16 @@ public class PassengerEventServiceImpl implements PassengerEventService {
 	@Override
 	public PassengerEvent findByUserId(Long userId) {
 		return this.passengerEventRepository.findByUserId(userId);
+	}
+
+	@Override
+	public boolean save(List<PassengerEvent> passengerEvents) {
+		try {
+			this.passengerEventRepository.saveAll(passengerEvents);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }
